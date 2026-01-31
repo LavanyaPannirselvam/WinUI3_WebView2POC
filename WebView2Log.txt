@@ -1,0 +1,8 @@
+[34096:38920:0131/135234.960:WARNING:net\dns\dns_config_service.cc:144] Failed to read DnsHosts.
+[34096:39216:0131/135235.015:ERROR:components\optimization_guide\core\model_execution\performance_class.cc:57] Edge LLM: Not supported on WebView2
+[34096:39216:0131/135235.026:WARNING:chrome\browser\extensions\activity_log\activity_log_policy.cc:71] Scheduling init
+[34096:39216:0131/135235.028:WARNING:chrome\browser\extensions\activity_log\activity_log_policy.cc:71] Scheduling init
+[27612:30560:0131/135235.101:WARNING:net\dns\dns_config_service.cc:144] Failed to read DnsHosts.
+[18808:23664:0131/135235.268:INFO:third_party\webrtc\rtc_base\cpu_info.cc:75] Available number of cores: 20
+[1256:22804:0131/135235.298:VERBOSE1:components\viz\service\main\viz_main_impl.cc:86] VizNullHypothesis is disabled (not a warning)
+[34096:8212:0131/135305.052:INFO:chrome\browser\extensions\extension_garbage_collector.cc:188] Garbage collection for extensions on file thread is complete.
