@@ -71,19 +71,78 @@ namespace WInUI3_POC
             }
         }
 
+        private string SetupUserProfile()
+        {
+            try
+            {
+                // Create user profile directory in AppData
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string userProfilePath = Path.Combine(appDataPath, "WInUI3_POC", "WebView2Profile");
+
+                // Ensure directory exists
+                if (!Directory.Exists(userProfilePath))
+                {
+                    Directory.CreateDirectory(userProfilePath);
+                    LogAction($"Created user profile directory: {userProfilePath}");
+                }
+
+                // Create profile configuration file
+                string profileConfigPath = Path.Combine(userProfilePath, "profile.json");
+                if (!File.Exists(profileConfigPath))
+                {
+                    string profileConfig = @"{
+  ""profile_name"": ""Lavanya"",
+  ""created_date"": """ + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @""",
+  ""cache_size_mb"": 100,
+  ""enable_cookies"": true,
+  ""enable_local_storage"": true,
+  ""enable_indexeddb"": true
+}";
+                    File.WriteAllText(profileConfigPath, profileConfig);
+                    LogAction("Profile configuration created");
+                }
+
+                // Create subdirectories for organized storage
+                string[] subDirs = { "Cache", "Cookies", "LocalStorage", "IndexedDB", "WebSQL" };
+                foreach (var subDir in subDirs)
+                {
+                    string subPath = Path.Combine(userProfilePath, subDir);
+                    if (!Directory.Exists(subPath))
+                    {
+                        Directory.CreateDirectory(subPath);
+                    }
+                }
+
+                LogAction($"User profile setup complete at: {userProfilePath}");
+                return userProfilePath;
+            }
+            catch (Exception ex)
+            {
+                LogAction($"ERROR: Failed to setup user profile - {ex.Message}");
+
+                // Fallback to temp directory
+                string fallbackPath = Path.Combine(Path.GetTempPath(), "WInUI3_POC_WebView2");
+                Directory.CreateDirectory(fallbackPath);
+                LogAction($"Using fallback profile path: {fallbackPath}");
+
+                return fallbackPath;
+            }
+        }
         private async void InitializeWebView()
         {
             try
             {
                 LogAction("WebView2 initialization started");
                 MyWebView.CoreWebView2Initialized += MyWebView_CoreWebView2Initialized;
-
+                string runtime = "C:\\Users\\lavanya-18922\\Downloads\\Microsoft.WebView2.FixedVersionRuntime.143.0.3650.139.x64";
+                string userDataFolder = SetupUserProfile();
                 var options = new CoreWebView2EnvironmentOptions
                 {
-                    AdditionalBrowserArguments = "--enable-logging --v=1 --log-file=D:\\source\\WInUI3_POC\\WebView2.log "
+                    AdditionalBrowserArguments = "--enable-logging --v=1 --log-file=D:\\source\\WInUI3_POC\\WebView2.log --disable-zero-copy"
                 };
-                var env = await CoreWebView2Environment.CreateWithOptionsAsync(null, null, options);
+                var env = await CoreWebView2Environment.CreateWithOptionsAsync(null, userDataFolder, options);
                 await MyWebView.EnsureCoreWebView2Async(env);
+                Debug.WriteLine(MyWebView.CoreWebView2.Environment.BrowserVersionString);
 
                 LogAction("WebView2 EnsureCoreWebView2Async completed");
 
