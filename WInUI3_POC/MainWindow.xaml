@@ -20,6 +20,13 @@
             Background="LightBlue"
             Click="Click_Click"
             Content="Click Me" />
+        <Button
+            x:Name="Save"
+            Margin="20,0,0,0"
+            HorizontalAlignment="Right"
+            Background="LightGreen"
+            Click="Save_Click"
+            Content="Save" />
         <Grid Grid.Row="1">
             <Border
                 Width="600"

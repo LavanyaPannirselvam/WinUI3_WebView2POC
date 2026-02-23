@@ -1,0 +1,158 @@
+Raster=2 :
+
+[2026-02-15 19:27:24.257] WebView2 initialization started
+[2026-02-15 19:27:24.348] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-15 19:27:26.044] CoreWebView2Initialized successfully. Browser version: 144.0.3719.115
+[2026-02-15 19:27:26.081] WebView2 EnsureCoreWebView2Async completed
+[2026-02-15 19:27:26.105] Diagnostic events setup complete
+[2026-02-15 19:27:26.110] NavigateToString called
+[2026-02-15 19:27:26.152] NAV Starting: .......
+[2026-02-15 19:27:26.392] Content loading
+[2026-02-15 19:27:26.397] DOM content loaded
+[2026-02-15 19:27:26.419] NAV Completed - Success: True, Status: Unknown
+[2026-02-15 19:27:26.716] JS Event: Performance tracking initialized
+[2026-02-15 19:27:26.722] Action tracking script injected
+[2026-02-15 19:28:11.724] JS Event: PERF:PASTE:content:434.10ms
+[2026-02-15 19:28:12.085] JS Event: PERF:PASTE:content:114.90ms
+[2026-02-15 19:28:12.808] JS Event: PERF:PASTE:content:59.20ms
+[2026-02-15 19:28:23.767] JS Event: PERF:PASTE:content:401.70ms
+[2026-02-15 19:28:23.768] JS Event: PERF:PASTE:content:65.80ms
+[2026-02-15 19:28:23.929] JS Event: PERF:PASTE:content:62.50ms
+[2026-02-15 19:28:24.156] JS Event: PERF:PASTE:content:76.10ms
+[2026-02-15 19:28:36.681] JS Event: PERF:PASTE:content:496.80ms
+[2026-02-15 19:28:36.714] JS Event: PERF:PASTE:content:190.70ms
+[2026-02-15 19:28:36.715] JS Event: PERF:PASTE:content:94.50ms
+[2026-02-15 19:28:36.843] JS Event: PERF:PASTE:content:74.70ms
+[2026-02-15 19:28:36.995] JS Event: PERF:PASTE:content:83.60ms
+[2026-02-15 19:28:43.796] JS Event: PERF:PASTE:content:335.20ms
+[2026-02-15 19:29:01.157] JS Event: PERF:PASTE:content:92.40ms
+[2026-02-15 19:29:01.466] JS Event: PERF:PASTE:content:123.60ms
+[2026-02-15 19:29:07.149] JS Event: PERF:PASTE:content:458.90ms
+[2026-02-15 19:29:07.150] JS Event: PERF:PASTE:content:129.50ms
+[2026-02-15 19:29:07.396] JS Event: PERF:PASTE:content:120.10ms
+[2026-02-15 19:29:25.193] JS Event: PERF:PASTE:content:613.00ms
+[2026-02-15 19:29:25.195] JS Event: PERF:PASTE:content:411.90ms
+[2026-02-15 19:29:25.352] JS Event: PERF:PASTE:content:442.70ms
+[2026-02-15 19:29:25.413] JS Event: PERF:PASTE:content:338.40ms
+[2026-02-15 19:29:25.415] JS Event: PERF:PASTE:content:147.40ms
+[2026-02-15 19:29:26.779] JS Event: PERF:PASTE:content:140.90ms
+[2026-02-15 19:29:27.135] JS Event: PERF:PASTE:content:268.90ms
+[2026-02-15 19:29:27.136] JS Event: PERF:PASTE:content:150.50ms
+[2026-02-15 19:30:32.042] JS Event: PERF:PASTE:content:387.20ms
+-------------------------------------------------------------------
+
+Raster=3:
+
+
+[2026-02-15 19:31:54.561] WebView2 initialization started
+[2026-02-15 19:31:55.059] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-15 19:31:56.217] [UI FREEZE DETECTED] UI thread is unresponsive
+[2026-02-15 19:31:56.711] [UI FREEZE DETECTED] UI thread is unresponsive
+[2026-02-15 19:31:58.059] CoreWebView2Initialized successfully. Browser version: 144.0.3719.115
+[2026-02-15 19:31:58.092] WebView2 EnsureCoreWebView2Async completed
+[2026-02-15 19:31:58.107] Diagnostic events setup complete
+[2026-02-15 19:31:58.110] NavigateToString called
+[2026-02-15 19:31:58.139] NAV Starting: .......
+[2026-02-15 19:31:58.328] Content loading
+[2026-02-15 19:31:58.595] DOM content loaded
+[2026-02-15 19:31:58.666] NAV Completed - Success: True, Status: Unknown
+[2026-02-15 19:31:58.681] JS Event: Performance tracking initialized
+[2026-02-15 19:31:58.686] Action tracking script injected
+[2026-02-15 19:32:20.318] JS Event: PERF:PASTE:content:453.50ms
+[2026-02-15 19:32:20.319] JS Event: PERF:PASTE:content:92.80ms
+[2026-02-15 19:32:20.454] JS Event: PERF:PASTE:content:45.50ms
+[2026-02-15 19:32:45.169] JS Event: PERF:PASTE:content:356.60ms
+[2026-02-15 19:32:45.171] JS Event: PERF:PASTE:content:58.30ms
+[2026-02-15 19:32:45.272] JS Event: PERF:PASTE:content:57.20ms
+[2026-02-15 19:32:45.480] JS Event: PERF:PASTE:content:55.90ms
+[2026-02-15 19:32:52.580] JS Event: PERF:PASTE:content:323.30ms
+[2026-02-15 19:32:52.581] JS Event: PERF:PASTE:content:74.50ms
+[2026-02-15 19:32:52.714] JS Event: PERF:PASTE:content:79.40ms
+[2026-02-15 19:32:52.860] JS Event: PERF:PASTE:content:75.80ms
+[2026-02-15 19:32:53.038] JS Event: PERF:PASTE:content:94.30ms
+[2026-02-15 19:33:06.362] JS Event: PERF:PASTE:content:287.20ms
+[2026-02-15 19:33:06.480] JS Event: PERF:PASTE:content:77.00ms
+[2026-02-15 19:33:06.727] JS Event: PERF:PASTE:content:86.00ms
+[2026-02-15 19:33:13.973] JS Event: PERF:PASTE:content:431.40ms
+[2026-02-15 19:33:13.974] JS Event: PERF:PASTE:content:112.50ms
+[2026-02-15 19:33:28.392] JS Event: PERF:PASTE:content:335.10ms
+[2026-02-15 19:33:28.393] JS Event: PERF:PASTE:content:107.00ms
+[2026-02-15 19:33:39.694] JS Event: PERF:PASTE:content:190.00ms
+[2026-02-15 19:33:39.847] JS Event: PERF:PASTE:content:100.90ms
+[2026-02-15 19:34:05.378] JS Event: PERF:PASTE:content:423.70ms
+[2026-02-15 19:34:05.379] JS Event: PERF:PASTE:content:115.30ms
+[2026-02-15 19:38:56.309] JS Event: PERF:PASTE:content:581.80ms
+[2026-02-15 19:38:56.310] JS Event: PERF:PASTE:content:157.80ms
+[2026-02-15 19:38:56.312] JS Event: PERF:PASTE:content:115.70ms
+[2026-02-15 19:38:56.313] JS Event: PERF:PASTE:content:69.80ms
+[2026-02-15 19:38:56.412] JS Event: PERF:PASTE:content:60.40ms
+[2026-02-15 19:39:03.691] JS Event: PERF:PASTE:content:401.90ms
+[2026-02-15 19:39:03.692] JS Event: PERF:PASTE:content:73.80ms
+[2026-02-15 19:39:08.608] JS Event: PERF:PASTE:content:263.90ms
+[2026-02-15 19:39:08.609] JS Event: PERF:PASTE:content:79.50ms
+[2026-02-15 19:39:20.075] JS Event: PERF:PASTE:content:61.70ms
+[2026-02-15 19:39:39.305] JS Event: PERF:PASTE:content:659.00ms
+[2026-02-15 19:39:39.307] JS Event: PERF:PASTE:content:165.40ms
+[2026-02-15 19:39:47.899] JS Event: PERF:PASTE:content:435.60ms
+[2026-02-15 19:39:47.900] JS Event: PERF:PASTE:content:93.30ms
+
+
+----------------------------------------------------------------
+Raster=4:
+
+
+[2026-02-15 19:42:00.593] WebView2 initialization started
+[2026-02-15 19:42:00.776] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-15 19:42:02.629] [UI FREEZE DETECTED] UI thread is unresponsive
+[2026-02-15 19:42:03.096] [UI FREEZE DETECTED] UI thread is unresponsive
+[2026-02-15 19:42:04.146] CoreWebView2Initialized successfully. Browser version: 144.0.3719.115
+[2026-02-15 19:42:04.173] WebView2 EnsureCoreWebView2Async completed
+[2026-02-15 19:42:04.186] Diagnostic events setup complete
+[2026-02-15 19:42:04.190] NavigateToString called
+[2026-02-15 19:42:04.215] NAV Starting: .......
+[2026-02-15 19:42:04.355] Content loading
+[2026-02-15 19:42:04.572] DOM content loaded
+[2026-02-15 19:42:04.642] NAV Completed - Success: True, Status: Unknown
+[2026-02-15 19:42:04.653] JS Event: Performance tracking initialized
+[2026-02-15 19:42:04.656] Action tracking script injected
+[2026-02-15 19:42:22.884] JS Event: PERF:PASTE:content:533.60ms
+[2026-02-15 19:42:22.885] JS Event: PERF:PASTE:content:162.20ms
+[2026-02-15 19:42:22.886] JS Event: PERF:PASTE:content:68.50ms
+[2026-02-15 19:42:32.499] JS Event: PERF:PASTE:content:380.90ms
+[2026-02-15 19:42:32.501] JS Event: PERF:PASTE:content:68.50ms
+[2026-02-15 19:42:32.594] JS Event: PERF:PASTE:content:68.20ms
+[2026-02-15 19:42:42.960] JS Event: PERF:PASTE:content:262.30ms
+[2026-02-15 19:42:43.063] JS Event: PERF:PASTE:content:65.80ms
+[2026-02-15 19:42:45.373] JS Event: PERF:PASTE:content:61.90ms
+[2026-02-15 19:42:45.530] JS Event: PERF:PASTE:content:64.80ms
+[2026-02-15 19:42:45.695] JS Event: PERF:PASTE:content:70.30ms
+[2026-02-15 19:42:45.844] JS Event: PERF:PASTE:content:71.70ms
+[2026-02-15 19:42:57.263] JS Event: PERF:PASTE:content:723.50ms
+[2026-02-15 19:42:57.264] JS Event: PERF:PASTE:content:228.60ms
+[2026-02-15 19:42:57.266] JS Event: PERF:PASTE:content:95.30ms
+[2026-02-15 19:43:03.936] JS Event: PERF:PASTE:content:345.40ms
+[2026-02-15 19:43:03.937] JS Event: PERF:PASTE:content:93.80ms
+[2026-02-15 19:43:13.876] JS Event: PERF:PASTE:content:361.80ms
+[2026-02-15 19:43:13.878] JS Event: PERF:PASTE:content:89.90ms
+[2026-02-15 19:43:23.724] JS Event: PERF:PASTE:content:373.20ms
+[2026-02-15 19:43:23.725] JS Event: PERF:PASTE:content:103.10ms
+[2026-02-15 19:43:33.157] JS Event: PERF:PASTE:content:523.30ms
+[2026-02-15 19:43:33.158] JS Event: PERF:PASTE:content:218.10ms
+[2026-02-15 19:43:33.159] JS Event: PERF:PASTE:content:125.10ms
+[2026-02-15 19:43:33.327] JS Event: PERF:PASTE:content:105.00ms
+[2026-02-15 19:43:38.990] JS Event: PERF:PASTE:content:109.80ms
+[2026-02-15 19:43:39.180] JS Event: PERF:PASTE:content:119.80ms
+[2026-02-15 19:43:44.968] JS Event: PERF:PASTE:content:384.80ms
+[2026-02-15 19:43:44.969] JS Event: PERF:PASTE:content:133.60ms
+[2026-02-15 19:43:50.350] JS Event: PERF:PASTE:content:396.30ms
+[2026-02-15 19:43:50.408] JS Event: PERF:PASTE:content:139.10ms
+[2026-02-15 19:44:11.925] JS Event: PERF:PASTE:content:555.00ms
+[2026-02-15 19:44:11.926] JS Event: PERF:PASTE:content:190.30ms
+[2026-02-15 19:46:12.972] JS Event: PERF:PASTE:content:486.70ms
+[2026-02-15 19:46:12.974] JS Event: PERF:PASTE:content:109.70ms
+[2026-02-15 19:46:12.975] JS Event: PERF:PASTE:content:56.70ms
+[2026-02-15 19:46:13.192] JS Event: PERF:PASTE:content:76.90ms
+[2026-02-15 19:46:13.401] JS Event: PERF:PASTE:content:81.40ms
+[2026-02-15 19:46:28.111] JS Event: PERF:PASTE:content:216.10ms
+[2026-02-15 19:46:28.176] JS Event: PERF:PASTE:content:48.50ms
+[2026-02-15 19:46:28.363] JS Event: PERF:PASTE:content:54.30ms

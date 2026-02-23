@@ -1,0 +1,125 @@
+[2026-02-05 14:47:39.289] WebView2 initialization started
+[2026-02-05 14:47:40.249] CoreWebView2Initialized successfully. Browser version: 144.0.3719.104
+[2026-02-05 14:47:40.269] WebView2 EnsureCoreWebView2Async completed
+[2026-02-05 14:47:40.281] Diagnostic events setup complete
+[2026-02-05 14:47:40.296] NavigateToString called
+[2026-02-05 14:47:40.315] NAV Starting: .......
+[2026-02-05 14:47:40.577] Content loading
+[2026-02-05 14:47:40.580] DOM content loaded
+[2026-02-05 14:47:40.595] NAV Completed - Success: True, Status: Unknown
+[2026-02-05 14:47:40.601] JS Event: Performance tracking initialized
+[2026-02-05 14:47:40.604] Action tracking script injected
+[2026-02-05 14:47:55.284] JS Event: PERF:PASTE:content:1276.10ms
+[2026-02-05 14:48:02.038] JS Event: PERF:PASTE:content:4878.60ms
+[2026-02-05 14:48:02.040] JS Event: PERF:PASTE:content:3614.10ms
+[2026-02-05 14:48:02.041] JS Event: PERF:PASTE:content:2852.00ms
+[2026-02-05 14:48:02.042] JS Event: PERF:PASTE:content:2069.20ms
+[2026-02-05 14:48:02.042] JS Event: PERF:PASTE:content:1168.00ms
+[2026-02-05 14:48:14.274] JS Event: PERF:PASTE:content:2336.80ms
+[2026-02-05 14:48:14.275] JS Event: PERF:PASTE:content:1125.90ms
+[2026-02-05 14:50:26.581] WebView2 initialization started
+[2026-02-05 14:50:27.647] CoreWebView2Initialized successfully. Browser version: 144.0.3719.104
+[2026-02-05 14:50:27.668] WebView2 EnsureCoreWebView2Async completed
+[2026-02-05 14:50:27.678] Diagnostic events setup complete
+[2026-02-05 14:50:27.681] NavigateToString called
+[2026-02-05 14:50:27.700] NAV Starting: .......
+[2026-02-05 14:50:27.952] Content loading
+[2026-02-05 14:50:27.955] DOM content loaded
+[2026-02-05 14:50:27.973] NAV Completed - Success: True, Status: Unknown
+[2026-02-05 14:50:27.994] JS Event: Performance tracking initialized
+[2026-02-05 14:50:27.997] Action tracking script injected
+[2026-02-05 14:50:37.722] JS Event: PERF:PASTE:content:3803.10ms
+[2026-02-05 14:50:37.723] JS Event: PERF:PASTE:content:2614.50ms
+[2026-02-05 14:50:37.724] JS Event: PERF:PASTE:content:1919.00ms
+[2026-02-05 14:50:37.725] JS Event: PERF:PASTE:content:1187.80ms
+[2026-02-05 14:51:05.669] JS Event: PERF:PASTE:content:6310.70ms
+[2026-02-05 14:51:05.671] JS Event: PERF:PASTE:content:5101.80ms
+[2026-02-05 14:51:05.672] JS Event: PERF:PASTE:content:4291.70ms
+[2026-02-05 14:51:05.673] JS Event: PERF:PASTE:content:3315.90ms
+[2026-02-05 14:51:05.674] JS Event: PERF:PASTE:content:2147.50ms
+
+------------------------------------------------------------------------------------
+After arguments:
+[2026-02-05 15:33:11.232] WebView2 initialization started
+[2026-02-05 15:33:11.278] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-05 15:33:12.425] CoreWebView2Initialized successfully. Browser version: 144.0.3719.104
+[2026-02-05 15:33:12.463] WebView2 EnsureCoreWebView2Async completed
+[2026-02-05 15:33:12.475] Diagnostic events setup complete
+[2026-02-05 15:33:12.479] NavigateToString called
+[2026-02-05 15:33:12.499] NAV Starting: .......
+[2026-02-05 15:33:12.631] Content loading
+[2026-02-05 15:33:12.634] DOM content loaded
+[2026-02-05 15:33:12.648] NAV Completed - Success: True, Status: Unknown
+[2026-02-05 15:33:12.665] JS Event: Performance tracking initialized
+[2026-02-05 15:33:12.668] Action tracking script injected
+[2026-02-05 15:33:33.535] JS Event: PERF:PASTE:content:1196.20ms
+[2026-02-05 15:33:40.673] JS Event: PERF:PASTE:content:1206.00ms
+[2026-02-05 15:33:45.608] JS Event: PERF:PASTE:content:1114.00ms
+[2026-02-05 15:33:52.384] JS Event: PERF:PASTE:content:2452.80ms
+[2026-02-05 15:33:52.389] JS Event: PERF:PASTE:content:1587.30ms
+[2026-02-05 15:33:52.390] JS Event: PERF:PASTE:content:930.70ms
+[2026-02-05 15:34:09.167] JS Event: PERF:PASTE:content:2086.40ms
+[2026-02-05 15:34:09.185] JS Event: PERF:PASTE:content:1032.10ms
+[2026-02-05 15:34:24.978] JS Event: PERF:PASTE:content:3638.30ms
+[2026-02-05 15:34:24.980] JS Event: PERF:PASTE:content:2320.00ms
+[2026-02-05 15:34:24.981] JS Event: PERF:PASTE:content:1346.00ms
+
+--------------------------------------------------------------------------------------------
+Containment check:
+Pasting initially
+[2026-02-08 21:17:58.578] WebView2 initialization started
+[2026-02-08 21:17:58.644] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-08 21:17:59.694] CoreWebView2Initialized successfully. Browser version: 144.0.3719.115
+[2026-02-08 21:17:59.710] WebView2 EnsureCoreWebView2Async completed
+[2026-02-08 21:17:59.721] Diagnostic events setup complete
+[2026-02-08 21:17:59.724] NavigateToString called
+[2026-02-08 21:17:59.744] NAV Starting: .......
+[2026-02-08 21:17:59.882] Content loading
+[2026-02-08 21:17:59.891] DOM content loaded
+[2026-02-08 21:17:59.901] NAV Completed - Success: True, Status: Unknown
+[2026-02-08 21:17:59.911] JS Event: Performance tracking initialized
+[2026-02-08 21:17:59.913] Action tracking script injected
+[2026-02-08 21:18:29.344] JS Event: PERF:PASTE:content:373.60ms
+[2026-02-08 21:18:30.225] JS Event: PERF:PASTE:content:481.00ms
+[2026-02-08 21:18:37.915] JS Event: PERF:PASTE:content:900.50ms
+[2026-02-08 21:18:37.917] JS Event: PERF:PASTE:content:487.70ms
+[2026-02-08 21:18:49.388] JS Event: PERF:PASTE:content:1312.10ms
+[2026-02-08 21:18:49.393] JS Event: PERF:PASTE:content:673.30ms
+[2026-02-08 21:19:03.986] JS Event: PERF:PASTE:content:2531.60ms
+[2026-02-08 21:19:03.987] JS Event: PERF:PASTE:content:1750.60ms
+[2026-02-08 21:19:03.988] JS Event: PERF:PASTE:content:957.80ms
+[2026-02-08 21:19:38.719] JS Event: PERF:PASTE:content:2392.10ms
+[2026-02-08 21:19:38.720] JS Event: PERF:PASTE:content:1276.10ms
+[2026-02-08 21:19:50.924] JS Event: PERF:PASTE:content:2772.00ms
+[2026-02-08 21:19:50.925] JS Event: PERF:PASTE:content:1287.50ms
+-------------------------------------------------------------------------------------------------
+Pasting at the end:
+[2026-02-08 21:26:26.220] WebView2 initialization started
+[2026-02-08 21:26:26.260] User profile setup complete at: C:\Users\lavanya-18922\AppData\Roaming\WInUI3_POC\WebView2Profile
+[2026-02-08 21:26:27.044] CoreWebView2Initialized successfully. Browser version: 144.0.3719.115
+[2026-02-08 21:26:27.056] WebView2 EnsureCoreWebView2Async completed
+[2026-02-08 21:26:27.064] Diagnostic events setup complete
+[2026-02-08 21:26:27.066] NavigateToString called
+[2026-02-08 21:26:27.084] NAV Starting: .......
+[2026-02-08 21:26:27.200] Content loading
+[2026-02-08 21:26:27.207] DOM content loaded
+[2026-02-08 21:26:27.227] NAV Completed - Success: True, Status: Unknown
+[2026-02-08 21:26:27.230] JS Event: Performance tracking initialized
+[2026-02-08 21:26:27.232] Action tracking script injected
+[2026-02-08 21:26:41.021] JS Event: PERF:PASTE:content:3382.80ms
+[2026-02-08 21:26:41.022] JS Event: PERF:PASTE:content:3156.90ms
+[2026-02-08 21:26:41.025] JS Event: PERF:PASTE:content:2875.90ms
+[2026-02-08 21:26:41.027] JS Event: PERF:PASTE:content:2489.80ms
+[2026-02-08 21:26:41.051] JS Event: PERF:PASTE:content:1861.70ms
+[2026-02-08 21:26:41.052] JS Event: PERF:PASTE:content:1007.00ms
+[2026-02-08 21:26:50.682] JS Event: PERF:PASTE:content:4442.90ms
+[2026-02-08 21:26:50.683] JS Event: PERF:PASTE:content:3657.40ms
+[2026-02-08 21:26:50.684] JS Event: PERF:PASTE:content:2853.00ms
+[2026-02-08 21:26:50.685] JS Event: PERF:PASTE:content:2023.90ms
+[2026-02-08 21:26:50.686] JS Event: PERF:PASTE:content:1053.40ms
+[2026-02-08 21:27:01.775] JS Event: PERF:PASTE:content:2441.20ms
+[2026-02-08 21:27:01.776] JS Event: PERF:PASTE:content:1194.30ms
+[2026-02-08 21:27:17.609] JS Event: PERF:PASTE:content:6294.50ms
+[2026-02-08 21:27:17.611] JS Event: PERF:PASTE:content:4894.70ms
+[2026-02-08 21:27:17.612] JS Event: PERF:PASTE:content:3566.40ms
+[2026-02-08 21:27:17.613] JS Event: PERF:PASTE:content:1953.70ms
