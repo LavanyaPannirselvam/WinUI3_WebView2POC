@@ -1,6 +1,7 @@
 ﻿// editorInterop.js
 
 let sharedBuffer = null;
+window.saveStartTime = 0;
 
 // Listen for shared buffer initialization from C#
 window.chrome.webview.addEventListener('sharedbufferreceived', e => {
@@ -18,17 +19,17 @@ window.chrome.webview.addEventListener('sharedbufferreceived', e => {
 function setupEditorNotifications() {
     const editor = document.getElementById("editor");
     if (editor) {
-        editor.addEventListener("input", e => {
-            window.chrome.webview.postMessage({
-                type: "userInput",
-                text: e.target.innerText
-            });
-        });
+        //editor.addEventListener("input", e => {
+        //    window.chrome.webview.postMessage({
+        //        type: "userInput",
+        //        text: e.target.innerText
+        //    });
+        //});
     }
 }
 
 // Write full content into the shared buffer and notify C#
-function sendFullContent() {
+function sendFullContentWithBuffer() {
     if (!sharedBuffer) {
         console.error("Shared buffer not initialized");
         return;
@@ -47,6 +48,22 @@ function sendFullContent() {
     window.chrome.webview.postMessage({ type: "fullContentReady" });
 }
 
+function sendFullContent() {
+    const editor = document.getElementById("editor");
+
+    if (!editor) {
+        console.error("Editor not found");
+        return;
+    }
+
+    // Use innerHTML for rich editor
+    const content = editor.innerHTML;
+    const endTime = performance.now();
+    const duration = endTime - window.saveStartTime;
+    console.log("Full content sent to host");
+    return { Content: content, Time: duration };
+}
+
 // Placeholder function for periodic content retrieval
 function getContent() {
     console.log("getContent called");
@@ -58,4 +75,9 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupEditorNotifications);
 } else {
     setupEditorNotifications();
+}
+
+function onSaveButtonClick() {
+    console.log("Save button clicked");
+    window.saveStartTime = performance.now();
 }

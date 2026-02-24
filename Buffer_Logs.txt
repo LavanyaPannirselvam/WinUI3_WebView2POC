@@ -1,0 +1,77 @@
+[2026-02-24 18:06:40.316] WebView2 initialization started
+[2026-02-24 18:06:40.362] User profile setup complete at: C:\Users\lavanya-18922\AppData\Local\Packages\498f84bb-1b56-4f3c-81cc-a046f3eb074e_n3g5jb86hzgn8\LocalState\WebView2Profile
+[2026-02-24 18:06:41.299] CoreWebView2Initialized successfully. Browser version: 145.0.3800.70
+[2026-02-24 18:06:41.328] WebView2 EnsureCoreWebView2Async completed
+[2026-02-24 18:06:41.453] Diagnostic events setup complete
+[2026-02-24 18:06:41.457] NavigateToString called
+[2026-02-24 18:06:41.486] NAV Starting: .......
+[2026-02-24 18:06:41.553] Content loading
+[2026-02-24 18:06:41.568] DOM content loaded
+[2026-02-24 18:06:41.725] JS Event: Action tracking initialized
+[2026-02-24 18:06:41.732] NAV Completed - Success: True, Status: Unknown
+[2026-02-24 18:06:41.734] Action tracking script injected
+[2026-02-24 18:06:45.563] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:06:45.634] Script execution result: 1.699999999254942
+[2026-02-24 18:06:50.055] JS Event: FOCUS: DIV
+[2026-02-24 18:06:50.105] JS Event: CLICK: DIV at (196,165)
+[2026-02-24 18:06:51.099] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:06:51.125] JS Event: KEYDOWN: a (code: KeyA)
+[2026-02-24 18:06:51.145] JS Event: SELECTION: Lorem ipsum dolor sit amet, consectetur adipiscing
+[2026-02-24 18:06:51.541] JS Event: KEYDOWN: c (code: KeyC)
+[2026-02-24 18:06:52.129] JS Event: KEYDOWN: ArrowRight (code: ArrowRight)
+[2026-02-24 18:06:52.336] JS Event: SCROLL: scrollY=54304.80078125
+[2026-02-24 18:06:52.809] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:06:53.324] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:06:53.346] JS Event: KEYDOWN: v (code: KeyV)
+[2026-02-24 18:06:53.615] JS Event: INPUT: DIV - insertFromPaste
+[2026-02-24 18:06:53.840] JS Event: SCROLL: scrollY=109081.6015625
+[2026-02-24 18:06:55.805] JS Event: BLUR: DIV
+[2026-02-24 18:06:59.845] JS Event: FOCUS: DIV
+[2026-02-24 18:06:59.873] JS Event: BLUR: DIV
+[2026-02-24 18:06:59.918] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:06:59.940] Script execution result: 2.199999999254942
+[2026-02-24 18:07:04.723] JS Event: FOCUS: DIV
+[2026-02-24 18:07:04.779] JS Event: CLICK: DIV at (154,492)
+[2026-02-24 18:07:05.166] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:07:05.668] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:07:05.698] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:07:05.725] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:07:05.751] JS Event: KEYDOWN: Control (code: ControlLeft)
+[2026-02-24 18:07:05.775] JS Event: KEYDOWN: v (code: KeyV)
+[2026-02-24 18:07:06.005] JS Event: INPUT: DIV - insertFromPaste
+[2026-02-24 18:07:06.030] JS Event: KEYDOWN: v (code: KeyV)
+[2026-02-24 18:07:06.321] JS Event: INPUT: DIV - insertFromPaste
+[2026-02-24 18:07:06.548] JS Event: SCROLL: scrollY=218635.203125
+[2026-02-24 18:07:06.990] JS Event: BLUR: DIV
+[2026-02-24 18:07:10.231] JS Event: FOCUS: DIV
+[2026-02-24 18:07:10.261] JS Event: BLUR: DIV
+[2026-02-24 18:07:10.287] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:10.319] Script execution result: 5.400000002235174
+[2026-02-24 18:07:10.893] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:10.917] Script execution result: 3.900000002235174
+[2026-02-24 18:07:15.238] JS Event: FOCUS: DIV
+[2026-02-24 18:07:15.290] JS Event: CLICK: DIV at (200,488)
+[2026-02-24 18:07:17.174] JS Event: BLUR: DIV
+[2026-02-24 18:07:17.228] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:17.258] Script execution result: 4.5
+[2026-02-24 18:07:26.982] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:27.010] Script execution result: 4.199999999254942
+[2026-02-24 18:07:39.667] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:39.695] Script execution result: 4
+[2026-02-24 18:07:40.184] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:40.209] Script execution result: 3.199999999254942
+[2026-02-24 18:07:40.597] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:40.623] Script execution result: 3.7000000029802322
+[2026-02-24 18:07:46.580] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:46.611] Script execution result: 4.200000002980232
+[2026-02-24 18:07:46.782] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:46.812] Script execution result: 3.599999997764826
+[2026-02-24 18:07:46.962] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:46.988] Script execution result: 4.300000000745058
+[2026-02-24 18:07:47.119] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:47.147] Script execution result: 4
+[2026-02-24 18:07:47.269] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:47.292] Script execution result: 3.399999998509884
+[2026-02-24 18:07:47.419] Save button clicked - attempting to execute sendFullContent
+[2026-02-24 18:07:47.442] Script execution result: 4
+-----------------------------------------------------------------------------------------------
