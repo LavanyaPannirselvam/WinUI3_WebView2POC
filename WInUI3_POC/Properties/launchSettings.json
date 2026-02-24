@@ -4,7 +4,8 @@
       "commandName": "MsixPackage"
     },
     "WInUI3_POC (Unpackaged)": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "jsWebView2Debugging": true
     }
   }
 }

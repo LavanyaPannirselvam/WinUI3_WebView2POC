@@ -7,9 +7,12 @@ using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.WebUI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -40,7 +43,7 @@ namespace WInUI3_POC
             _webViewLogFile = Path.Combine(logsDirectory, "WebView2.log");
             SetupUiFreezeDetection();
             InitializeWebView();
-            SetUpReadTimer();
+           // SetUpReadTimer();
         }
 
         private void SetUpReadTimer()
@@ -173,8 +176,82 @@ namespace WInUI3_POC
 
                 LogAction("WebView2 EnsureCoreWebView2Async completed");
 
+                await LoadScriptsAsync();
+
                 WebView2DiagnosticEvents();
                 SetupActionLogging();
+                
+                string json= @"{
+
+let sharedBuffer = null;
+
+// Listen for shared buffer initialization from C#
+window.chrome.webview.addEventListener('sharedbufferreceived', e => {
+    if (e.additionalDataAsJson) {
+        const meta = JSON.parse(e.additionalDataAsJson);
+        if (meta.type === ""init"") {
+            // Store the buffer reference for later use
+            sharedBuffer = e.buffer;
+            console.log(""Shared buffer initialized"");
+        }
+    }
+});
+
+// Set up notifications for live typing
+function setupEditorNotifications() {
+    const editor = document.getElementById(""editor"");
+    if (editor) {
+        editor.addEventListener(""input"", e => {
+            window.chrome.webview.postMessage(JSON.stringify({
+                type: ""userInput"",
+                text: e.target.innerText
+            }));
+        });
+    }
+}
+
+// Write full content into the shared buffer and notify C#
+function sendFullContent() {
+    if (!sharedBuffer) {
+        console.error(""Shared buffer not initialized"");
+        return;
+    }
+
+    const editor = document.getElementById(""editor"");
+    const text = editor ? editor.innerText : """";
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(text);
+
+    const headerSize = 4;
+    if (bytes.length + headerSize > sharedBuffer.byteLength) {
+        console.error(""Content exceeds shared buffer size"");
+        return;
+    }
+
+    // Write into the existing buffer
+    const view = new Uint8Array(sharedBuffer);
+    const lengthView = new DataView(sharedBuffer);
+    lengthView.setUint32(0, bytes.length, true);
+    view.set(bytes, headerSize);
+
+    // Notify C# that full content is ready
+    window.chrome.webview.postMessage(JSON.stringify({ type: ""fullContentReady"" }));
+}
+
+// Placeholder function for periodic content retrieval
+function getContent() {
+    console.log(""getContent called"");
+    // Could return content here if needed
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupEditorNotifications);
+} else {
+    setupEditorNotifications();
+}
+}";
+                //await MyWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(json);
             }
             catch (Exception ex)
             {
@@ -183,111 +260,12 @@ namespace WInUI3_POC
                 return;
             }
 
-            // Load external script content
-            string scriptContent = "";
-            try
-            {
-                // Try multiple possible locations for the script file
-                string[] possiblePaths = new[]
-                {
-                    Path.Combine(AppContext.BaseDirectory, "scripts.js"),
-                    Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path, "scripts.js"),
-                    Path.Combine(Directory.GetCurrentDirectory(), "scripts.js"),
-                    "scripts.js"
-                };
-
-                string scriptPath = null;
-                foreach (var path in possiblePaths)
-                {
-                    if (File.Exists(path))
-                    {
-                        scriptPath = path;
-                        break;
-                    }
-                }
-
-                if (scriptPath != null)
-                {
-                    scriptContent = File.ReadAllText(scriptPath);
-                    LogAction($"Successfully loaded scripts.js from: {scriptPath} ({scriptContent.Length} characters)");
-                }
-                else
-                {
-                    LogAction($"WARNING: scripts.js not found in any location");
-                    
-                    // Fallback: Define the script inline
-                    scriptContent = @"
-let sharedBuffer = null;
-
-window.chrome.webview.addEventListener('sharedbufferreceived', e => {
-    if (e.additionalDataAsJson) {
-        const meta = JSON.parse(e.additionalDataAsJson);
-        if (meta.type === 'init') {
-            sharedBuffer = e.buffer;
-            console.log('Shared buffer initialized');
-        }
-    }
-});
-
-function setupEditorNotifications() {
-    const editor = document.getElementById('editor');
-    if (editor) {
-        editor.addEventListener('input', e => {
-            window.chrome.webview.postMessage({
-                type: 'userInput',
-                text: e.target.innerText
-            });
-        });
-    }
-}
-
-function sendFullContent() {
-    console.log('sendFullContent called');
-    if (!sharedBuffer) {
-        console.error('Shared buffer not initialized');
-        window.chrome.webview.postMessage({ type: 'error', message: 'Shared buffer not initialized' });
-        return;
-    }
-
-    const editor = document.getElementById('editor');
-    const text = editor ? editor.innerText : '';
-    console.log('Editor text length: ' + text.length);
-    
-    const encoder = new TextEncoder();
-    const bytes = encoder.encode(text);
-
-    const view = new Uint8Array(sharedBuffer);
-    view.set(bytes);
-
-    window.chrome.webview.postMessage({ type: 'fullContentReady' });
-    console.log('Message posted to C#');
-}
-
-function getContent() {
-    console.log('getContent called');
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupEditorNotifications);
-} else {
-    setupEditorNotifications();
-}
-";
-                    LogAction("Using inline fallback script");
-                }
-            }
-            catch (Exception ex)
-            {
-                LogAction($"ERROR: Failed to load scripts.js - {ex.Message}");
-            }
 
             string html = $@"<!DOCTYPE html>
                             <html>
                             <head>
                                 <meta charset='UTF-8'>
-                                <script>
-                                    {scriptContent}
-                                </script>
+                                
                                 <style>
                                     #editor {{
                                         min-height: 100%;
@@ -316,6 +294,18 @@ if (document.readyState === 'loading') {
             MyWebView.NavigateToString(html);
         }
 
+        private async Task LoadScriptsAsync()
+        {
+            if (MyWebView.CoreWebView2 == null)
+            {
+                return;
+            }
+
+            var scriptFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///scripts.js"));
+            var scriptContent = await FileIO.ReadTextAsync(scriptFile);
+            await MyWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scriptContent);
+        }
+
         private Task SendBytesToPageAsync()
         {
             if (MyWebView.CoreWebView2 == null)
@@ -323,9 +313,12 @@ if (document.readyState === 'loading') {
                 return Task.CompletedTask;
             }
 
-            const ulong oneMegabytes = 1024 * 1024;
+            const ulong oneMegabytes = 5* 1024 * 1024;
             _sharedBuffer = MyWebView.CoreWebView2.Environment.CreateSharedBuffer(oneMegabytes);
-
+            if(_sharedBuffer != null)
+            {
+                Debug.WriteLine($"Shared buffer created with size: {_sharedBuffer.Size} bytes");
+            }
             string additionalDataAsJson = "{\"type\":\"init\"}";
             MyWebView.CoreWebView2.PostSharedBufferToScript(
                 _sharedBuffer,
@@ -343,18 +336,68 @@ if (document.readyState === 'loading') {
             // Listen for messages from JavaScript
             MyWebView.CoreWebView2.WebMessageReceived += (s, e) =>
             {
-                //LogAction($"JS Event: {e.TryGetWebMessageAsString()}");
-                var json = e.TryGetWebMessageAsString();
-                var obj = System.Text.Json.JsonDocument.Parse(json);
-
-                if (obj.RootElement.GetProperty("type").GetString() == "fullContentReady")
+                try
                 {
-                    var stream = _sharedBuffer.OpenStream();
-                    using var reader = new StreamReader((Stream)stream);
-                    string content = reader.ReadToEnd();
+                    var json = e.TryGetWebMessageAsString();
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        LogAction("Received empty or non-string web message, skipping.");
+                        return;
+                    }
 
-                    Console.WriteLine("Full editor content: " + content);
-                    Save.Foreground = new SolidColorBrush(Colors.Red);
+                    // Try parsing as JSON object
+                    System.Text.Json.JsonDocument obj;
+                    try
+                    {
+                        obj = System.Text.Json.JsonDocument.Parse(json);
+                    }
+                    catch
+                    {
+                        // Not a JSON message (e.g. plain string from tracking scripts)
+                        LogAction($"JS Event: {json}");
+                        return;
+                    }
+
+                    if (!obj.RootElement.TryGetProperty("type", out var typeProp))
+                    {
+                        LogAction($"JS message without type: {json}");
+                        return;
+                    }
+
+                    var messageType = typeProp.GetString();
+
+                    if (messageType == "fullContentReady")
+                    {
+                        if (_sharedBuffer == null)
+                        {
+                            LogAction("ERROR: Shared buffer is not initialized");
+                            return;
+                        }
+
+                        using var stream = _sharedBuffer.OpenStream().AsStream();
+                        stream.Position = 0;
+                        using var reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: false);
+                        var length = reader.ReadInt32();
+                        if (length < 0 || length > (long)_sharedBuffer.Size - sizeof(int))
+                        {
+                            LogAction($"ERROR: Invalid shared buffer length: {length}");
+                            return;
+                        }
+
+                        var bytes = reader.ReadBytes(length);
+                        string content = Encoding.UTF8.GetString(bytes);
+
+                        LogAction($"Full editor content received, length: {content.Length}");
+                        Save.Foreground = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (messageType == "userInput")
+                    {
+                        LogAction("User input detected in editor");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogAction($"ERROR processing web message: {ex.Message}");
                 }
             };
 
@@ -490,11 +533,13 @@ if (document.readyState === 'loading') {
             coreWebView.NavigationCompleted += async (s, e) =>
             {
                 LogAction($"NAV Completed - Success: {e.IsSuccess}, Status: {e.WebErrorStatus}");
+                MyWebView.CoreWebView2.OpenDevToolsWindow();
                 if (!_sharedBufferPosted && e.IsSuccess)
                 {
                     _sharedBufferPosted = true;
                     await SendBytesToPageAsync();
                 }
+                
             };
 
             // Content loading events
@@ -534,7 +579,7 @@ if (document.readyState === 'loading') {
                     return;
                 }
 
-                var result = await MyWebView.ExecuteScriptAsync("sendFullContent()");
+                var result = await MyWebView.ExecuteScriptAsync("sendFullContent();");
                 LogAction($"Script execution result: {result}");
             }
             catch (Exception ex)
