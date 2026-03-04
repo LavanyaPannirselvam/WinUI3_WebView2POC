@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -11,6 +11,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -64,11 +65,11 @@
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
-    <AppInstallerUri>D:\source\Before Args</AppInstallerUri>
+    <AppInstallerUri>D:\source\Shared buffer build</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <PackageCertificateKeyFile>WInUI3_POC_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxPackageDir>D:\source\Before Args\</AppxPackageDir>
+    <AppxPackageDir>D:\source\Shared buffer build\</AppxPackageDir>
   </PropertyGroup>
 </Project>

@@ -10,7 +10,7 @@
   <Identity
     Name="498f84bb-1b56-4f3c-81cc-a046f3eb074e"
     Publisher="CN=lavanya-18922"
-    Version="1.0.1.0" />
+    Version="1.0.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="498f84bb-1b56-4f3c-81cc-a046f3eb074e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

@@ -1,8 +1,5 @@
-using ABI.Microsoft.UI.Xaml;
 using Microsoft.UI;
 using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.Web.WebView2.Core;
@@ -15,39 +12,47 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using Windows.Storage;
-using Windows.UI.WebUI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace WInUI3_POC
 {
+    // COM interface that exposes the raw byte pointer of a Windows.Foundation.IMemoryBuffer
+    [Guid("5b0d3235-4dba-4d44-865e-8f1d0ef4f6e5")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [System.Runtime.InteropServices.ComVisible(true)]
+    public unsafe interface IMemoryBufferByteAccess
+    {
+        void GetBuffer(out byte* buffer, out uint capacity);
+    }
+
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainWindow : Microsoft.UI.Xaml.Window
     {
-        private readonly string _actionLogFile = @"D:\source\WInUI3_POC\SharedBuffer_Logs.txt";
-        private readonly string _webViewLogFile;
+        private readonly string _actionLogFile = string.Empty;//@"D:\source\WInUI3_POC\SharedBuffer_Logs.txt";
+        private readonly string _webViewLogFile = string.Empty;
         private DispatcherQueueTimer _uiFreezeTimer;
         private DateTime _lastUiHeartbeat;
-        private Timer _backgroundWatchdog;
         private bool _sharedBufferPosted;
         private const int FreezeThresholdMs = 2000;
         private Microsoft.UI.Xaml.DispatcherTimer _readTimer;
         private CoreWebView2SharedBuffer _sharedBuffer;
-
+        private Timer _backgroundWatchdog;
         public MainWindow()
         {
             InitializeComponent();
             var logsDirectory = GetLogsDirectory();
-            //Directory.CreateDirectory(logsDirectory);
-            //_actionLogFile = Path.Combine(logsDirectory, "Selection_Raster_Logs.txt");
-            //_webViewLogFile = Path.Combine(logsDirectory, "WebView2.log");
+            Directory.CreateDirectory(logsDirectory);
+            _actionLogFile = Path.Combine(logsDirectory, "SharedBuffer_Logs.txt");
+            _webViewLogFile = Path.Combine(logsDirectory, "WebView2.log");
             SetupUiFreezeDetection();
             InitializeWebView();
-           // SetUpReadTimer();
+            // SetUpReadTimer();
         }
 
         private void SetUpReadTimer()
@@ -176,6 +181,7 @@ namespace WInUI3_POC
                 };
                 var env = await CoreWebView2Environment.CreateWithOptionsAsync(null, userDataFolder, options);
                 await MyWebView.EnsureCoreWebView2Async(env);
+                //await MyWebView.EnsureCoreWebView2Async();
                 Debug.WriteLine(MyWebView.CoreWebView2.Environment.BrowserVersionString);
 
                 LogAction("WebView2 EnsureCoreWebView2Async completed");
@@ -246,19 +252,20 @@ namespace WInUI3_POC
                 return Task.CompletedTask;
             }
 
-            const ulong oneMegabytes = 5* 1024 * 1024;
-            _sharedBuffer = MyWebView.CoreWebView2.Environment.CreateSharedBuffer(oneMegabytes);
-            if(_sharedBuffer != null)
+            const ulong bufferSize = 5 * 1024 * 1024;
+            _sharedBuffer = MyWebView.CoreWebView2.Environment.CreateSharedBuffer(bufferSize);
+            if (_sharedBuffer != null)
             {
                 Debug.WriteLine($"Shared buffer created with size: {_sharedBuffer.Size} bytes");
-            }
-            string additionalDataAsJson = "{\"type\":\"init\"}";
-            MyWebView.CoreWebView2.PostSharedBufferToScript(
-                _sharedBuffer,
-                CoreWebView2SharedBufferAccess.ReadWrite,
-                additionalDataAsJson
-            );
+                Debug.WriteLine($"Created SharedBuffer HashCode: {_sharedBuffer.GetHashCode()}");
+             
+                string additionalDataAsJson = "{\"type\":\"init\"}";
+                MyWebView.CoreWebView2.PostSharedBufferToScript(
+                    _sharedBuffer,
+                    CoreWebView2SharedBufferAccess.ReadWrite,
+                    additionalDataAsJson);
 
+            }
             return Task.CompletedTask;
         }
 
@@ -268,7 +275,7 @@ namespace WInUI3_POC
 
             double elapsed = 0;
             // Listen for messages from JavaScript
-            MyWebView.CoreWebView2.WebMessageReceived += (s, e) =>
+            MyWebView.CoreWebView2.WebMessageReceived += async (s, e) =>
             {
                 try
                 {
@@ -299,7 +306,8 @@ namespace WInUI3_POC
                     }
 
                     var messageType = typeProp.GetString();
-
+                    double readDuration = 0;
+                    double encodingDuration = 0;
                     if (messageType == "fullContentReady")
                     {
                         if (_sharedBuffer == null)
@@ -307,58 +315,18 @@ namespace WInUI3_POC
                             LogAction("ERROR: Shared buffer is not initialized");
                             return;
                         }
+                        obj.RootElement.TryGetProperty("bytes", out var sizeProp);
+                        var startRead = DateTime.Now;
+                        using var stream = _sharedBuffer.OpenStream().AsStreamForRead();
+                        byte[] buffer = new byte[sizeProp.GetInt32()];
+                        stream.ReadExactly(buffer);
+                        var endRead = DateTime.Now;
+                        readDuration = (endRead - startRead).TotalMilliseconds;
 
-                        var startTime = DateTime.UtcNow;
-
-                        //using var stream = _sharedBuffer.OpenStream().AsStream();
-                        //stream.Position = 0;
-                        //using var reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: false);
-                        //var length = reader.ReadInt32();
-                        //if (length < 0 || length > (long)_sharedBuffer.Size - sizeof(int))
-                        //{
-                        //    LogAction($"ERROR: Invalid shared buffer length: {length}");
-                        //    return;
-                        //}
-
-                        //var bytes = reader.ReadBytes(length);
-                        //string content = Encoding.UTF8.GetString(bytes);
-
-                        //--------------------------------------------------------
-                        //unsafe
-                        //{
-                        //    using var stream = _sharedBuffer.OpenStream().AsStream();
-                        //    stream.Position = 4;
-
-                        //    byte[] buffer = ArrayPool<byte>.Shared.Rent(length);
-
-                        //    fixed (byte* p = buffer)
-                        //    {
-                        //        stream.ReadExactly(buffer.AsSpan(0, length));
-                        //        string content = Encoding.UTF8.GetString(p, length);
-                        //    }
-                        //}
-
-                        //------------------------------------------
-                        using var stream = _sharedBuffer.OpenStream().AsStream();
-                        stream.Position = 0;
-
-                        Span<byte> header = stackalloc byte[4];
-                        stream.ReadExactly(header);
-
-                        int length = BitConverter.ToInt32(header);
-
-                        byte[] rented = ArrayPool<byte>.Shared.Rent(length);
-
-                        stream.ReadExactly(rented.AsSpan(0, length));
-                        string content = Encoding.UTF8.GetString(rented, 0, length);
-
-                        //-----------------------------------------
-
-
-
-                        elapsed = (DateTime.UtcNow - startTime).TotalMilliseconds;
-
-                        LogAction($"Full editor content received, length: {content.Length}, reading time: {elapsed:F2}ms");
+                        var startEncoding = DateTime.Now;
+                        string content = Encoding.UTF8.GetString(buffer);
+                        var endEncoding = DateTime.Now;
+                        encodingDuration = (endEncoding - startEncoding).TotalMilliseconds;
                         Save.Foreground = new SolidColorBrush(Colors.Red);
                     }
                     else if (messageType == "userInput")
@@ -372,9 +340,14 @@ namespace WInUI3_POC
                     }
                     else
                     {
-                        var timestamp = timeProp.GetDouble();
-                        var totaltime = timestamp + elapsed;
-                        LogAction($"Script execution result: {timestamp} ms total time with WR: {totaltime}ms");
+                        //var timestamp = timeProp.GetDouble();
+                        //var totaltime = timestamp + elapsed;
+                        //LogAction($"Script execution result: {timestamp} ms total time with WR: {totaltime}ms");
+
+                        LogAction($"Write duration : {timeProp} ms");
+                        LogAction($"Read duration : {readDuration} ms");
+                        LogAction($"Encoding duration : {encodingDuration} ms");
+                        LogAction("--------------------------------------------------");
                     }
                 }
                 catch (Exception ex)
@@ -473,7 +446,7 @@ namespace WInUI3_POC
                     })();
                 ";
 
-                 await MyWebView.CoreWebView2.ExecuteScriptAsync(trackingScript);
+                await MyWebView.CoreWebView2.ExecuteScriptAsync(trackingScript);
                 //await MyWebView.CoreWebView2.ExecuteScriptAsync(perfScript);
                 LogAction("Action tracking script injected");
             };
@@ -521,7 +494,7 @@ namespace WInUI3_POC
                     _sharedBufferPosted = true;
                     await SendBytesToPageAsync();
                 }
-                
+
             };
 
             // Content loading events
