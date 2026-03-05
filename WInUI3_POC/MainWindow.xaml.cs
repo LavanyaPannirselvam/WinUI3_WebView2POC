@@ -19,17 +19,7 @@ using Windows.Storage;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace WInUI3_POC
-{
-    // COM interface that exposes the raw byte pointer of a Windows.Foundation.IMemoryBuffer
-    [Guid("5b0d3235-4dba-4d44-865e-8f1d0ef4f6e5")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public unsafe interface IMemoryBufferByteAccess
-    {
-        void GetBuffer(out byte* buffer, out uint capacity);
-    }
-
-    /// <summary>
+{    /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainWindow : Microsoft.UI.Xaml.Window
@@ -41,17 +31,24 @@ namespace WInUI3_POC
         private bool _sharedBufferPosted;
         private const int FreezeThresholdMs = 2000;
         private Microsoft.UI.Xaml.DispatcherTimer _readTimer;
-        private CoreWebView2SharedBuffer _sharedBuffer;
         private Timer _backgroundWatchdog;
+
+        // ?? shared-buffer pool ???????????????????????????????????????????????
+        private static SharedBufferManager? _bufferManager;
+        private static readonly object _managerLock = new();
+        private SegmentHandle? _segmentHandle = null;
+        private readonly string _windowId = Guid.NewGuid().ToString("N");
         public MainWindow()
         {
             InitializeComponent();
+            Title = $"WInUI3_POC [{_windowId[..8]}]";
             var logsDirectory = GetLogsDirectory();
             Directory.CreateDirectory(logsDirectory);
             _actionLogFile = Path.Combine(logsDirectory, "SharedBuffer_Logs.txt");
             _webViewLogFile = Path.Combine(logsDirectory, "WebView2.log");
             SetupUiFreezeDetection();
             InitializeWebView();
+            Closed += (_, _) => ReleaseWindow();
             // SetUpReadTimer();
         }
 
@@ -248,25 +245,77 @@ namespace WInUI3_POC
         private Task SendBytesToPageAsync()
         {
             if (MyWebView.CoreWebView2 == null)
+                return Task.CompletedTask;
+
+            // Lazily create the shared-buffer manager once per process (all windows share it).
+            lock (_managerLock)
             {
+                _bufferManager ??= new SharedBufferManager(MyWebView.CoreWebView2.Environment);
+            }
+
+            // Allocate a 1 MB segment from whichever slab has free capacity
+            // (a new slab is created automatically if needed, up to the 2 GB limit).
+            SegmentHandle handle = _bufferManager.AllocateSegment(_windowId);
+            if (!handle.IsValid)
+            {
+                LogAction("ERROR: No free shared-buffer segment available (2 GB pool exhausted).");
                 return Task.CompletedTask;
             }
 
-            const ulong bufferSize = 5 * 1024 * 1024;
-            _sharedBuffer = MyWebView.CoreWebView2.Environment.CreateSharedBuffer(bufferSize);
-            if (_sharedBuffer != null)
-            {
-                Debug.WriteLine($"Shared buffer created with size: {_sharedBuffer.Size} bytes");
-                Debug.WriteLine($"Created SharedBuffer HashCode: {_sharedBuffer.GetHashCode()}");
-             
-                string additionalDataAsJson = "{\"type\":\"init\"}";
-                MyWebView.CoreWebView2.PostSharedBufferToScript(
-                    _sharedBuffer,
-                    CoreWebView2SharedBufferAccess.ReadWrite,
-                    additionalDataAsJson);
+            _segmentHandle = handle;
 
-            }
+            ulong segmentOffset = SharedBufferManager.ContentOffset(handle);
+            ulong segmentSize   = SharedBufferManager.ContentSize;
+
+            Debug.WriteLine(
+                $"[{_windowId}] Allocated slab={handle.SlabIndex} seg={handle.SegmentIndex}: " +
+                $"offset={segmentOffset}, size={segmentSize}");
+            LogAction(
+                $"Slab={handle.SlabIndex} Seg={handle.SegmentIndex} allocated " +
+                $"(offset={segmentOffset}, contentSize={segmentSize}, windowId={_windowId})");
+
+            // Post ONLY the slab buffer that owns this window's segment.
+            // JS receives a view of that slab's SharedArrayBuffer and uses
+            // segmentOffset to find its 1 MB slice within it.
+            string additionalDataAsJson =
+                System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    type          = "init",
+                    windowId      = _windowId,
+                    slabIndex     = handle.SlabIndex,
+                    segmentIndex  = handle.SegmentIndex,
+                    segmentOffset = (long)segmentOffset,
+                    segmentSize   = (long)segmentSize
+                });
+
+            MyWebView.CoreWebView2.PostSharedBufferToScript(
+                _bufferManager.GetSlabBuffer(handle),
+                CoreWebView2SharedBufferAccess.ReadWrite,
+                additionalDataAsJson);
+
+            // Update the UI badge.
+            SegmentInfoText.Text =
+                $"Slab {handle.SlabIndex}  Seg {handle.SegmentIndex}  |  " +
+                $"offset={segmentOffset}  |  contentSize={segmentSize} B  |  id={_windowId[..8]}";
+
             return Task.CompletedTask;
+        }
+
+        private void ReleaseWindow()
+        {
+            if (_bufferManager == null || _segmentHandle is not { IsValid: true } handle)
+                return;
+
+            LogAction($"Window closing – releasing slab={handle.SlabIndex} seg={handle.SegmentIndex} (windowId={_windowId})");
+            _bufferManager.ReleaseSegment(_windowId);
+            _segmentHandle = null;
+        }
+
+        private void NewWindow_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            var newWindow = new MainWindow();
+            newWindow.Activate();
+            LogAction($"Opened new window. Active windows now share the same 5 MB pool.");
         }
 
         private void SetupActionLogging()
@@ -310,16 +359,24 @@ namespace WInUI3_POC
                     double encodingDuration = 0;
                     if (messageType == "fullContentReady")
                     {
-                        if (_sharedBuffer == null)
+                        if (_bufferManager == null || _segmentHandle is not { IsValid: true } handle)
                         {
-                            LogAction("ERROR: Shared buffer is not initialized");
+                            LogAction("ERROR: Shared buffer / segment not initialized");
                             return;
                         }
+
+                        // Cross-check: verify the segment still belongs to this window.
+                        if (!_bufferManager.VerifyWindowId(handle, _windowId))
+                        {
+                            LogAction($"ERROR: Slab={handle.SlabIndex} Seg={handle.SegmentIndex} cross-check failed – aborting read.");
+                            return;
+                        }
+
                         obj.RootElement.TryGetProperty("bytes", out var sizeProp);
+                        int byteCount = sizeProp.GetInt32();
+
                         var startRead = DateTime.Now;
-                        using var stream = _sharedBuffer.OpenStream().AsStreamForRead();
-                        byte[] buffer = new byte[sizeProp.GetInt32()];
-                        stream.ReadExactly(buffer);
+                        byte[] buffer = _bufferManager.ReadSegmentContent(handle, byteCount);
                         var endRead = DateTime.Now;
                         readDuration = (endRead - startRead).TotalMilliseconds;
 

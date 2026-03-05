@@ -14,20 +14,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Button
-            x:Name="ClickButton"
-            Background="LightBlue"
-            Click="Click_Click"
-            Content="Click Me" />
-        <Button
-            x:Name="Save"
-            Margin="20,0,0,0"
-            HorizontalAlignment="Right"
-            Background="LightGreen"
-            Click="Save_Click"
-            Content="Save" />
-        <Grid Grid.Row="1">
+
+        <!--  Toolbar row  -->
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button
+                x:Name="ClickButton"
+                Background="LightBlue"
+                Click="Click_Click"
+                Content="Click Me" />
+            <Button
+                x:Name="Save"
+                Background="LightGreen"
+                Click="Save_Click"
+                Content="Save" />
+            <Button
+                x:Name="NewWindowButton"
+                Background="LightCoral"
+                Click="NewWindow_Click"
+                Content="New Window" />
+        </StackPanel>
+
+        <!--  Segment info badge  -->
+        <TextBlock
+            x:Name="SegmentInfoText"
+            Grid.Row="1"
+            Margin="0,4,0,0"
+            FontSize="11"
+            Foreground="Gray"
+            Text="Segment: pending" />
+
+        <!--  WebView2  -->
+        <Grid Grid.Row="2">
             <Border
                 Width="600"
                 Height="600"

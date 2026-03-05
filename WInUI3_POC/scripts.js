@@ -1,6 +1,11 @@
 ﻿window.sharedBuffer = null;
 window.saveStartTime = null;
 
+// Segment metadata received from C# when the shared buffer is posted.
+// segmentOffset: byte offset into the full 5 MB buffer where this window's 1 MB slice begins.
+// segmentSize:   usable bytes in this window's slice (1 MB minus the header C# reserved).
+window.segmentMeta = null;  // { windowId, segmentIndex, segmentOffset, segmentSize }
+
 window.getContent = function () {
     console.log("getContent called");
 };
@@ -33,6 +38,8 @@ function onSaveButtonClick() {
         const workerSource = `
             let sharedBuffer = null;
             let view = null;
+            let segmentOffset = 0;
+            let segmentSize = 0;
             const textEncoder = new TextEncoder();
 
             self.onmessage = (e) => {
@@ -40,7 +47,10 @@ function onSaveButtonClick() {
 
                 if (msg.type === "init") {
                     sharedBuffer = msg.sharedBuffer;
+                    segmentOffset = msg.segmentOffset;
+                    segmentSize   = msg.segmentSize;
                     view = new Uint8Array(sharedBuffer);
+                    console.log("[Worker] init: segmentOffset=" + segmentOffset + ", segmentSize=" + segmentSize);
                     self.postMessage({ type: "inited" });
                     return;
                 }
@@ -54,17 +64,16 @@ function onSaveButtonClick() {
                     const start = performance.now();
                     const bytes = textEncoder.encode(msg.text);
 
-                    if (bytes.length > sharedBuffer.byteLength) {
+                    if (bytes.length > segmentSize) {
                         self.postMessage({
                             type: "error",
-                            message: \`Content exceeds buffer. Required=\${bytes.length}, Capacity=\${sharedBuffer.byteLength}\`
+                            message: \`Content exceeds segment. Required=\${bytes.length}, Capacity=\${segmentSize}\`
                         });
                         return;
                     }
 
-                    // Write directly from offset 0 (NO HEADER)
-                    view.set(bytes, 0);
-                    console.log("First 10 bytes after write from worker thread:",Array.from(new Uint8Array(sharedBuffer, 0, 10)));
+                    // Write into this window's slice only (starting at segmentOffset)
+                    view.set(bytes, segmentOffset);
                     const end = performance.now();
 
                     self.postMessage({
@@ -106,9 +115,8 @@ function onSaveButtonClick() {
                 window.chrome.webview.postMessage(JSON.stringify({
                     type: "fullContentReady",
                     time: msg.durationMs,
-                    bytes: msg.byteLength   // length passed via notification
+                    bytes: msg.byteLength
                 }));
-                //window.chrome.webview.postSharedBuffer(window.sharedBuffer);
             }
         };
 
@@ -119,12 +127,20 @@ function onSaveButtonClick() {
         const worker = ensureSaveWorker();
 
         if (!window.sharedBuffer || bufferTransferredToWorker) return;
+        if (!window.segmentMeta) {
+            console.error("initWorkerWithSharedBuffer: segmentMeta not set");
+            return;
+        }
 
         workerInited = false;
 
+        // Transfer the full SharedArrayBuffer to the worker together with this
+        // window's slice coordinates so the worker writes to the right region.
         worker.postMessage({
-            type: "init",
-            sharedBuffer: window.sharedBuffer
+            type:          "init",
+            sharedBuffer:  window.sharedBuffer,
+            segmentOffset: window.segmentMeta.segmentOffset,
+            segmentSize:   window.segmentMeta.segmentSize
         }, [window.sharedBuffer]);
 
         bufferTransferredToWorker = true;
@@ -137,8 +153,15 @@ function onSaveButtonClick() {
 
             if (meta.type === "init") {
                 window.sharedBuffer = e.getBuffer();
+                window.segmentMeta  = meta;   // save { windowId, segmentIndex, segmentOffset, segmentSize }
                 bufferTransferredToWorker = false;
-                console.log("Shared buffer received with byteLength:", window.sharedBuffer.byteLength);
+                console.log(
+                    "Shared buffer received: total byteLength=" + window.sharedBuffer.byteLength +
+                    ", windowId="      + meta.windowId +
+                    ", segmentIndex="  + meta.segmentIndex +
+                    ", segmentOffset=" + meta.segmentOffset +
+                    ", segmentSize="   + meta.segmentSize
+                );
                 initWorkerWithSharedBuffer();
             }
         }
@@ -157,7 +180,6 @@ function onSaveButtonClick() {
         }
 
         const text = editor.innerText;
-
         const worker = ensureSaveWorker();
 
         if (!workerInited) {
