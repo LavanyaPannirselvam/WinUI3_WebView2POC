@@ -24,11 +24,26 @@ namespace WInUI3_POC
         private DateTime _lastUiHeartbeat;
         private Timer _backgroundWatchdog;
         private const int FreezeThresholdMs = 2000;
+        private int _counter = 0;
+        private DispatcherQueueTimer _bgMessageTimer;
         public MainWindow()
         {
             InitializeComponent();
             SetupUiFreezeDetection();
             InitializeWebView();
+            ScheduleBgMessage();
+        }
+
+        private void ScheduleBgMessage()
+        {
+            _bgMessageTimer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+            _bgMessageTimer.Interval = TimeSpan.FromSeconds(5);
+            _bgMessageTimer.IsRepeating = true;
+            _bgMessageTimer.Tick += (s, e) =>
+            {
+                BgMessageBox.Text = $"I'm from BG! : Counter {++_counter}";
+            };
+            _bgMessageTimer.Start();
         }
 
         private void SetupUiFreezeDetection()
@@ -141,7 +156,8 @@ namespace WInUI3_POC
                     AdditionalBrowserArguments = "--enable-logging --v=1 --log-file=D:\\source\\WInUI3_POC\\WebView2.log --disable-zero-copy"
                 };
                 var env = await CoreWebView2Environment.CreateWithOptionsAsync(null, userDataFolder, options);
-                await MyWebView.EnsureCoreWebView2Async(env);
+                //await MyWebView.EnsureCoreWebView2Async(env);
+                await MyWebView.EnsureCoreWebView2Async();
                 Debug.WriteLine(MyWebView.CoreWebView2.Environment.BrowserVersionString);
 
                 LogAction("WebView2 EnsureCoreWebView2Async completed");
@@ -177,7 +193,7 @@ namespace WInUI3_POC
             MyWebView.NavigateToString(html);
         }
 
-        private void SetupActionLogging() 
+        private void SetupActionLogging()
         {
             if (MyWebView.CoreWebView2 == null) return;
 
