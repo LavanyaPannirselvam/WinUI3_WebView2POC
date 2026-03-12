@@ -169,4 +169,36 @@ function onSaveButtonClick() {
         worker.postMessage({ type: "writeText", text });
     };
 
+
 })();
+
+
+const editor = document.querySelector('[contenteditable]');
+editor?.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+
+        document.execCommand(
+            'insertHTML',
+            false,
+            '<div><br></div>'
+        );
+    }
+});
+
+editor?.addEventListener('paste', function (e) {
+    e.preventDefault();
+
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    if (!text) return;
+
+    const lines = text.split(/\r?\n/);
+    const html = lines
+        .map((line, i) => {
+            if (i === 0) return line ? line : '<br>';
+            return `<div>${line || '<br>'}</div>`;
+        })
+        .join('');
+
+    document.execCommand('insertHTML', false, html);
+});
